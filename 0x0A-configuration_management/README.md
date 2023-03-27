@@ -1,0 +1,1 @@
+readme file foe configaration management
