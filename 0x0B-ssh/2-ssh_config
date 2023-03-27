@@ -1,0 +1,6 @@
+Host myserver
+  HostName <8.8.8.8>
+  User <user>
+  IdentityFile ~/.ssh/school
+  PreferredAuthentications publickey
+  PasswordAuthentication no
