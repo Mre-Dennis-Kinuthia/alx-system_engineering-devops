@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Generate an RSA key pair with 4096 bits
+ssh-keygen -b 4096 -t rsa -f school -N betty
+
+# Display the key fingerprint and randomart image
+ssh-keygen -lf school
+
+# Display the public key
+cat school.pub
