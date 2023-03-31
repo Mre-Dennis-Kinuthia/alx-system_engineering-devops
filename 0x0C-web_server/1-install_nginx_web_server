@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
-# Script to install nginx
-sudo apt-get -y update
-sudo apt-get -y install nginx
-sudo sh -c 'echo "Hello World!" > index.html'
-sudo service nginx start
-curl localhost
+# installing nginx, listening on port 80
+
+apt-get update
+apt-get install -y nginx
+
+ufw allow 'Nginx HTTP'
+chmod -R 755 /var/www
+echo 'Hello World!' > /var/www/html/index.html
+if [ "$(pgrep -c nginx)" -le 0 ]; then
+	service nginx start
+else
+	service nginx restart
+fi
