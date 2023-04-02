@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Install Nginx web server if it's not installed already
+if [ $(dpkg-query -W -f='${Status}' nginx 2>/dev/null | grep -c "ok installed") -eq 0 ];
+then
+  sudo apt-get update
+  sudo apt-get install nginx -y
+fi
+
+# Configure Nginx to redirect /redirect_me to the new URL with a 301 status code
+sudo sed -i '27i\
+        location /redirect_me {\
+            return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\
+        }' /etc/nginx/sites-available/default
+
+# Reload Nginx configuration to apply changes
+sudo service nginx reload
