@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
-# Update packages and install Nginx
-sudo apt-get update
-sudo apt-get -y install nginx
+# Configure Nginx so that its HTTP response contains a custom header (on web-01 and web-02)
 
-# Configure custom Nginx response header
-sudo sed -i '/^http {/a \        server_tokens off;\n        add_header X-Served-By $hostname;' /etc/nginx/nginx.conf
+sudo apt-get update -y
+sudo apt-get install nginx -y
 
-# Restart Nginx service
-sudo systemct1 nginx restart
+sudo sh -c 'echo "Hello World!" > /var/www/html/index.html'
+echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/error_page.html
+
+sudo sed -i '/listen \[\:\:\]\:80 default_server/ a \\n\trewrite ^/redirect_me$ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;' /etc/nginx/sites-enabled/default
+
+sudo sed -i '/rewrite/ a \\n\terror_page 404 /error_page.html;' /etc/nginx/sites-enabled/default
+sudo sed -i '/# pass PHP scripts to FastCGI server/ i \\tlocation = /error_page.html {\n\t\troot /usr/share/nginx/html;\n\t}\n' /etc/nginx/sites-enabled/default
+
+sudo sed -i '/error_page/ a \\tadd_header X-Served-By $HOSTNAME;' /etc/nginx/sites-enabled/default
+sudo service nginx restart
