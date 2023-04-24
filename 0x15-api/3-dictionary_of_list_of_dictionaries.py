@@ -10,7 +10,12 @@ import sys
 
 
 def export_tasks_to_json():
-    """ Get all employees"""
+   """Retrieves information about all tasks from all employees and exports
+    them to a JSON file named 'todo_all_employees.json'.
+    
+    Returns:
+        None
+    """
     employees_url = 'https://jsonplaceholder.typicode.com/users'
     employees = requests.get(employees_url).json()
 
