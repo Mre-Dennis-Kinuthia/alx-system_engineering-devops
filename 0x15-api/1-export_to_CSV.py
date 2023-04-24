@@ -1,42 +1,48 @@
-#!/usr/bin/python3
-"""
-Script that, using this REST API,
-exports information about the TODO list progress
-for a given employee ID in CSV format
-"""
+#!/usr/bin/env python3
+"""Python script that, using this REST API,
+    for a given employee ID, returns information about
+    his/her TODO list progress and exports it to a CSV file"""
+
 import csv
 import requests
 from sys import argv
 
 
-def export_employee_todo_list_csv(emp_id):
-    """
-    Script that, using this REST API,
-    for a given employee ID, returns information
-    about the TODO list progress and exports it to a CSV file.
+def export_employee_todo_list_csv(employee_id):
+    """export data to csv file"""
+    user_data = requests.get(
+        'https://jsonplaceholder.typicode.com/users/{}'.format(employee_id)).json()
+    todo_list = requests.get(
+        'https://jsonplaceholder.typicode.com/todos?userId={}'.format(employee_id)).json()
 
-    Usage: ./2-export_to_CSV.py <emp_id>
+    # prepare data for csv file
+    data = []
+    for task in todo_list:
+        task_data = [str(employee_id),
+                     user_data['username'],
+                     str(task['completed']),
+                     task['title'].replace(',', '')]
+        data.append(task_data)
 
-    The script exports a CSV file with the following format:
-    "USER_ID","USERNAME","TASK_COMPLETED_STATUS","TASK_TITLE"
-
-    he filename of the exported CSV file is "<emp_id>.csv".
-    """
-    employee_url = "https://jsonplaceholder.typicode.com/users/" + emp_id
-    tsk_url = "https://jsonplaceholder.typicode.com/todos?userId=" + emp_id
-
-    employee_name = (requests.get(employee_url)).json().get("name")
-    tasks = requests.get(tsk_url)
-
-    with open(emp_id + ".csv", mode="w", newline="") as file:
+    # write data to csv file
+    filename = '{}.csv'.format(employee_id)
+    with open(filename, mode='w') as file:
         writer = csv.writer(file, quoting=csv.QUOTE_ALL)
-        for task in tasks.json():
-            writer.writerow([task.get("userId"),
-                             employee_name, task.get("completed"),
-                             task.get("title")])
-    print("CSV file exported successfully!")
+        for row in data:
+            writer.writerow(row)
+
+    print('Employee {}\'s tasks saved to {}'.format(employee_id, filename))
 
 
-if __name__ == "__main__":
-    emp_id = argv[1]
+if __name__ == '__main__':
+    if len(argv) != 2:
+        print('Usage: ./1-export_to_CSV.py <employee_id>')
+        exit(1)
+
+    try:
+        emp_id = int(argv[1])
+    except ValueError:
+        print('Employee ID must be an integer')
+        exit(1)
+
     export_employee_todo_list_csv(emp_id)
