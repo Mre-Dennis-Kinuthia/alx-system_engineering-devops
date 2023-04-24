@@ -4,8 +4,8 @@ Script that, using this REST API,
 exports information about the TODO list progress
 for a given employee ID in CSV format
 """
-import requests
 import csv
+import requests
 from sys import argv
 
 
