@@ -6,8 +6,14 @@ from sys import argv
 
 def get_employee_info(employee_id):
     """
-    Given an employee ID, retrieves the employee's name and the number of tasks completed
-    out of the total number of tasks.
+    Sends a GET request to the JSONPlaceholder API to retrieve information
+    about the specified employee.
+
+    Args:
+        employee_id (int): The ID of the employee to retrieve information for.
+
+    Returns:
+        dict: A dictionary containing information about the employee.
     """
     # Make a GET request to the API to retrieve the employee data
     url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
@@ -37,7 +43,14 @@ def get_employee_info(employee_id):
 
 def print_employee_todo_list(employee_id):
     """
-    Given an employee ID, retrieves and prints the employee's TODO list progress.
+    Sends a GET request to the JSONPlaceholder API to retrieve the TODO list
+    for the specified employee.
+
+    Args:
+        employee_id (int): The ID of the employee to retrieve the TODO list for.
+
+    Returns:
+        list: A list of dictionaries containing information about each task.
     """
     employee_name, completed_tasks, total_tasks = get_employee_info(employee_id)
 
