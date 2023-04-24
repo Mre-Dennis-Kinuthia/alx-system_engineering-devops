@@ -29,7 +29,7 @@ def export_employee_todo_list_csv(emp_id):
     tasks = requests.get(tsk_url)
 
     with open(emp_id + ".csv", mode="w", newline="") as file:
-        writer = csv.writer(file)
+        writer = csv.writer(file, quoting=csv.QUOTE_ALL)
         for task in tasks.json():
             writer.writerow([task.get("userId"),
                              employee_name, task.get("completed"),
