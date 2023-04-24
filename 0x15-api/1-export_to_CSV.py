@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-Script that, using this REST API, 
+Script that, using this REST API,
 exports information about the TODO list progress
 for a given employee ID in CSV format
 """
@@ -11,7 +11,7 @@ from sys import argv
 
 def export_employee_todo_list_csv(employee_id):
     """
-    Script that, using this REST API, 
+    Script that, using this REST API,
     for a given employee ID, returns information
     about the TODO list progress and exports it to a CSV file.
 
@@ -23,16 +23,17 @@ def export_employee_todo_list_csv(employee_id):
     he filename of the exported CSV file is "<employee_id>.csv".
     """
     employee_url = "https://jsonplaceholder.typicode.com/users/" + employee_id
-    tasks_url = "https://jsonplaceholder.typicode.com/todos?userId=" + employee_id
+    tsk_url = "https://jsonplaceholder.typicode.com/todos?userId=" + employee_id
 
     employee_name = (requests.get(employee_url)).json().get("name")
-    tasks = requests.get(tasks_url)
+    tasks = requests.get(tsk_url)
 
     with open(employee_id + ".csv", mode="w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
+        writer.writerow(["USER_ID", "USERNAME",
+                         "TASK_COMPLETED_STATUS", "TASK_TITLE"])
         for task in tasks.json():
-            writer.writerow([task.get("userId"), 
+            writer.writerow([task.get("userId"),
                              employee_name, task.get("completed"), task.get("title")])
     print("CSV file exported successfully!")
 
