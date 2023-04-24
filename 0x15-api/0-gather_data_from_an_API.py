@@ -1,81 +1,29 @@
-#!/usr/bin/python3
-
-"""Gather data from API"""
-
+##!/usr/bin/python3
+"""
+Script that, using this REST API, for a given employee ID, returns information
+about the TODO list progress
+"""
 import requests
 from sys import argv
 
-def get_employee_info(employee_id):
-    """
-    Sends a GET request to the JSONPlaceholder API to retrieve information
-    about the specified employee.
-
-    Args:
-        employee_id (int): The ID of the employee to retrieve information for.
-
-    Returns:
-        dict: A dictionary containing information about the employee.
-    """
-    # Make a GET request to the API to retrieve the employee data
-    url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-    response = requests.get(url)
-
-    # If the response is not successful, raise an exception
-    if response.status_code != 200:
-        raise Exception(f"Failed to retrieve employee data: {response.content}")
-
-    # Parse the JSON response to get the employee's name
-    employee_name = response.json()["name"]
-
-    # Make another GET request to retrieve the employee's TODO list
-    url = f"https://jsonplaceholder.typicode.com/todos?userId={employee_id}"
-    response = requests.get(url)
-
-    # If the response is not successful, raise an exception
-    if response.status_code != 200:
-        raise Exception(f"Failed to retrieve employee TODO list: {response.content}")
-
-    # Count the number of completed tasks and the total number of tasks
-    tasks = response.json()
-    total_tasks = len(tasks)
-    completed_tasks = len([task for task in tasks if task["completed"]])
-
-    return employee_name, completed_tasks, total_tasks
-
-def print_employee_todo_list(employee_id):
-    """
-    Sends a GET request to the JSONPlaceholder API to retrieve the TODO list
-    for the specified employee.
-
-    Args:
-        employee_id (int): The ID of the employee to retrieve the TODO list for.
-
-    Returns:
-        list: A list of dictionaries containing information about each task.
-    """
-    employee_name, completed_tasks, total_tasks = get_employee_info(employee_id)
-
-    print(f"Employee {employee_name} is done with tasks({completed_tasks}/{total_tasks}):")
-
-    # Make another GET request to retrieve the employee's TODO list
-    url = f"https://jsonplaceholder.typicode.com/todos?userId={employee_id}"
-    response = requests.get(url)
-
-    # If the response is not successful, raise an exception
-    if response.status_code != 200:
-        raise Exception(f"Failed to retrieve employee TODO list: {response.content}")
-
-    # Print the title of each completed task
-    tasks = response.json()
-    for task in tasks:
-        if task["completed"]:
-            print("\t " + task["title"])
-
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2 or not sys.argv[1].isdigit():
-        print("Usage: {} EMPLOYEE_ID".format(sys.argv[0]))
-        sys.exit(1)
+    total = 0
+    completed = 0
+    employee_url = "https://jsonplaceholder.typicode.com/users/" + argv[1]
+    tasks_url = "https://jsonplaceholder.typicode.com/todos"
+    employee_id = int(argv[1])
 
-    employee_id = int(sys.argv[1])
-    print_employee_todo_list(employee_id)
+    employee_name = (requests.get(employee_url)).json().get("name")
+    tasks = requests.get(tasks_url)
+    for task in tasks.json():
+        if (task.get("userId") == employee_id):
+            total += 1
+            if (task.get("completed")):
+                completed += 1
+    print("Employee {} is done with tasks({}/{}):"
+          .format(employee_name, completed, total))
+    for task in tasks.json():
+        if (task.get("userId") == employee_id):
+            if (task.get("completed")):
+                print("\t " + task.get("title"))
