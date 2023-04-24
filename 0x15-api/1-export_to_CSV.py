@@ -34,7 +34,8 @@ def export_employee_todo_list_csv(emp_id):
                          "TASK_COMPLETED_STATUS", "TASK_TITLE"])
         for task in tasks.json():
             writer.writerow([task.get("userId"),
-                             employee_name, task.get("completed"), task.get("title")])
+                             employee_name, task.get("completed"),
+                             task.get("title")])
     print("CSV file exported successfully!")
 
 
