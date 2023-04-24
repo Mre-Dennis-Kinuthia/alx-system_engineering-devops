@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 """Python script that uses the JSONPlaceholder API
 to retrieve information about all tasks from all employees
 and export them to a JSON file."""
@@ -8,7 +9,7 @@ import requests
 import sys
 
 
-if __name__ == '__main__':
+def export_tasks_to_json():
     """ Get all employees"""
     employees_url = 'https://jsonplaceholder.typicode.com/users'
     employees = requests.get(employees_url).json()
@@ -35,3 +36,7 @@ if __name__ == '__main__':
     """ Export tasks to a JSON file """
     with open('todo_all_employees.json', mode='w') as json_file:
         json.dump(tasks_by_employee, json_file)
+
+
+if __name__ == '__main__':
+    export_tasks_to_json()
