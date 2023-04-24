@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 """Gather data from API"""
 
-import json
 import requests
-import sys
+from sys import argv
 
 def get_employee_info(employee_id):
     """
