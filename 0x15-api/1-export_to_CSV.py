@@ -13,7 +13,8 @@ def export_employee_todo_list_csv(emp_id):
     user_data = requests.get(
         'https://jsonplaceholder.typicode.com/users/{}'.format(emp_id)).json()
     todo_list = requests.get(
-        'https://jsonplaceholder.typicode.com/todos?userId={}'.format(emp_id)).json()
+        'https://jsonplaceholder.typicode.com/todos?userId={}'
+        .format(emp_id)).json()
 
     # prepare data for csv file
     data = []
