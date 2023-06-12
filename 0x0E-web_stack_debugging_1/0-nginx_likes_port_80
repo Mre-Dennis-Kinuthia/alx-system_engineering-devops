@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Update package list and install net-tools and Nginx
+apt update
+apt install net-tools nginx -y
+
+# Check if Nginx is listening on port 80
+if ! netstat -tuln | grep -q ":80 "; then
+    # Create Nginx configuration file
+    echo "server {
+        listen 80;
+        root /var/www/html;
+        index index.html;
+    }" > /etc/nginx/sites-available/default
+
+    # Restart Nginx service
+    systemctl restart nginx
+    echo "Nginx installed and configured to listen on port 80."
+else
+    echo "Nginx is already listening on port 80."
+fi
