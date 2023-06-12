@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-
 # Update package list and install net-tools and Nginx
+
 apt update
 apt install net-tools nginx -y
 
