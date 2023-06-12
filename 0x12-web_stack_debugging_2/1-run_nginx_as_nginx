@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# script that configures a system to run nginx as nginx user & nginx must be listening on all active IPs on port 8080
+chmod 666 /etc/nginx/nginx.conf
+chown nginx /etc/nginx/nginx.conf
+sed -i 's/80/8080/g' /etc/nginx/sites-available/default
+pkill apache2
+sudo -u nginx service nginx restart

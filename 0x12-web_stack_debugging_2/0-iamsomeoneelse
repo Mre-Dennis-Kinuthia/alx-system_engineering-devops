@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-#comment
-if [ $# -eq 0 ]; then
-  echo "Usage: $0 <username>"
-  exit 1
+# script that runs the whoami command under the user passed as an argument
+if [[ -z "$(getent passwd "$1")" ]]; then
+    sudo useradd "$1" -p "$1"
+    sudo -u "$1" whoami
+    sudo userdel "$1"
+else
+    sudo -u "$1" whoami
 fi
-
-username=$1
-sudo -u "$username" id -un
