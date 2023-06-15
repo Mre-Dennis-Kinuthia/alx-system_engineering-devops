@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# This script stops a process that displays "To infinity and beyond" indefinitely.
+kill "$(pgrep -f "4-to_infinity_and_beyond")"
